@@ -7,17 +7,18 @@ import (
 	"github.com/kilianlievens/advent-of-code-2023/advent"
 )
 
-var textNumberReplacer = strings.NewReplacer(
-	"one", "1",
-	"two", "2",
-	"three", "3",
-	"four", "4",
-	"five", "5",
-	"six", "6",
-	"seven", "7",
-	"eight", "8",
-	"nine", "9",
-)
+func injectNumbers(input string) string {
+	input = strings.ReplaceAll(input, "one", "one1one")
+	input = strings.ReplaceAll(input, "two", "two2two")
+	input = strings.ReplaceAll(input, "three", "three3three")
+	input = strings.ReplaceAll(input, "four", "four4four")
+	input = strings.ReplaceAll(input, "five", "five5five")
+	input = strings.ReplaceAll(input, "six", "six6six")
+	input = strings.ReplaceAll(input, "seven", "seven7seven")
+	input = strings.ReplaceAll(input, "eight", "eight8eight")
+	input = strings.ReplaceAll(input, "nine", "nine9nine")
+	return input
+}
 
 func main() {
 	exampleOneInput := advent.Read("./input/day_one/example_one.txt")
@@ -35,7 +36,7 @@ func calibrate(input []string, parseText bool) int {
 
 	for _, line := range input {
 		if parseText {
-			line = textNumberReplacer.Replace(line)
+			line = injectNumbers(line)
 		}
 
 		foundFirst := false
