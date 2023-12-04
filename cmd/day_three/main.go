@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"strconv"
 
-	"github.com/kilianlievens/advent-of-code-2023/advent"
+	a "github.com/kilianlievens/advent-of-code-2023/advent"
 )
 
 type Gear struct {
@@ -12,16 +12,12 @@ type Gear struct {
 	value      int
 }
 
-func gearKey(x, y int) string {
-	return fmt.Sprintf("%d,%d", x, y)
-}
-
 func main() {
-	exampleOneInput := advent.Read("./input/day_three/example_one.txt")
+	exampleOneInput := a.Read("./input/day_three/example_one.txt")
 	partSum, gearSum := fixEngine(exampleOneInput)
 	fmt.Printf("Example input: partSum %d, gearSum %d\n", partSum, gearSum) // 4361, 467835
 
-	puzzleInput := advent.Read("./input/day_three/puzzle_one.txt")
+	puzzleInput := a.Read("./input/day_three/puzzle_one.txt")
 	partSum, gearSum = fixEngine(puzzleInput)
 	fmt.Printf("Puzzle input: partSum %d, gearSum %d\n", partSum, gearSum) // 533784, 78826761
 }
@@ -30,26 +26,21 @@ func fixEngine(input []string) (int, int) {
 	partSum := 0
 	gearSum := 0
 
-	var gears map[string]*Gear = make(map[string]*Gear)
-	var symbols [][]bool
+	var gears map[a.Coord]*Gear = make(map[a.Coord]*Gear)
+	var symbols map[a.Coord]bool = make(map[a.Coord]bool)
 
 	// Populate symbol matrix and find all potential gears
 	for y, line := range input {
-		var row []bool
-
 		for x, char := range line {
 			_, err := strconv.Atoi(string(char))
 			isSymbol := err != nil && char != '.'
-			row = append(row, isSymbol)
+			symbols[a.Coord{X: x, Y: y}] = isSymbol
 
 			if char == '*' {
 				newGear := Gear{neighbours: 0, value: 1}
-				gears[gearKey(x, y)] = &newGear
+				gears[a.Coord{X: x, Y: y}] = &newGear
 			}
 		}
-
-		row = append(row, false) // Extra column
-		symbols = append(symbols, row)
 	}
 
 	// Parse numbers and detect/calculate surrounding symbols and gears
@@ -76,11 +67,12 @@ func fixEngine(input []string) (int, int) {
 
 				for i := max(y-1, 0); i <= min(y+1, len(input)-1); i++ {
 					for j := max(x-len(currentNumberString)-1, 0); j <= min(x, len(line)-1); j++ {
-						if symbols[i][j] {
+						isSymbol, ok := symbols[a.Coord{X: j, Y: i}]
+						if ok && isSymbol {
 							surroundingSymbol = true
 						}
 
-						gear, ok := gears[gearKey(j, i)]
+						gear, ok := gears[a.Coord{X: j, Y: i}]
 						if ok {
 							gear.neighbours++
 							gear.value *= currentNumber
