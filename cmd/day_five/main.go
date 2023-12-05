@@ -150,9 +150,10 @@ func findLocation(input []string, seedRange bool) int {
 		}
 	}
 
-	// Execute
-	for _, seed := range seeds {
-		for i := seed.Start; i < seed.Start+seed.RangeLength; i++ {
+	seedToLocation := func(pair seedPair, c chan<- int) {
+		low := math.MaxInt32
+
+		for i := pair.Start; i < pair.Start+pair.RangeLength; i++ {
 			soil := convert(seedToSoil, i)
 			fert := convert(soilToFertilizer, soil)
 			wate := convert(fertilizerToWater, fert)
@@ -161,9 +162,25 @@ func findLocation(input []string, seedRange bool) int {
 			humi := convert(temperatureToHumidity, temp)
 			loca := convert(humidityToLocation, humi)
 
-			if loca < lowestLocation {
-				lowestLocation = loca
+			if loca < low {
+				low = loca
 			}
+		}
+
+		c <- low
+	}
+
+	// Execute
+	c := make(chan int)
+
+	for _, seed := range seeds {
+		go seedToLocation(seed, c)
+	}
+
+	for range seeds {
+		low := <-c
+		if low < lowestLocation {
+			lowestLocation = low
 		}
 	}
 
