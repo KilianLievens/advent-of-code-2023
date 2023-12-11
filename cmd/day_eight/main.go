@@ -50,26 +50,6 @@ func step(instructions []string, net map[string]node, position string, steps uin
 	return curNode.RightKey, curNode.EndNode
 }
 
-func gcd(a, b uint64) uint64 {
-	for b != 0 {
-		t := b
-		b = a % b
-		a = t
-	}
-
-	return a
-}
-
-func lcm(a, b uint64, integers ...uint64) uint64 {
-	result := a * b / gcd(a, b)
-
-	for i := 0; i < len(integers); i++ {
-		result = lcm(result, integers[i])
-	}
-
-	return result
-}
-
 func navigate(input []string) (uint64, uint64) {
 	// Parse
 	instructions := strings.Split(input[0], "")
@@ -146,7 +126,7 @@ func navigate(input []string) (uint64, uint64) {
 		loopLenghts = append(loopLenghts, l.Length)
 	}
 
-	ghostSteps := lcm(loopLenghts[0], loopLenghts[1], loopLenghts[2:]...)
+	ghostSteps := advent.LCM(loopLenghts[0], loopLenghts[1], loopLenghts[2:]...)
 
 	return steps, ghostSteps
 }
