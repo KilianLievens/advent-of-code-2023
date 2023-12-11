@@ -16,22 +16,6 @@ var symbolMap map[rune]int = map[rune]int{
 	'#': galaxy,
 }
 
-func transpose(matrix [][]int) [][]int {
-	newMatrix := make([][]int, len(matrix[0]))
-
-	for y := range newMatrix {
-		newMatrix[y] = make([]int, len(matrix))
-	}
-
-	for y, row := range matrix {
-		for x, s := range row {
-			newMatrix[x][y] = s
-		}
-	}
-
-	return newMatrix
-}
-
 func getExpandingY(universe [][]int) []int {
 	var knownYExpansion []int
 	for y, row := range universe {
@@ -82,23 +66,11 @@ func predictGalaxies(
 	return expandedGalaxies
 }
 
-func absInt(x int) int {
-	if x < 0 {
-		return -x
-	}
-
-	return x
-}
-
-func manhattenDistance(a, b advent.Coord) int {
-	return absInt(a.X-b.X) + absInt(a.Y-b.Y)
-}
-
-func manhattenDistanceSum(galaxies []advent.Coord) int {
+func calcManhattanDistanceSum(galaxies []advent.Coord) int {
 	sum := 0
 	for i, og := range galaxies {
 		for _, ng := range galaxies[i+1:] {
-			sum += manhattenDistance(og, ng)
+			sum += advent.CalcManhattanDistance(og, ng)
 		}
 	}
 
@@ -137,14 +109,14 @@ func getGalaxyDistances(input []string) []int {
 
 	// Expansion predictions
 	expandingY := getExpandingY(originalUniverse)
-	tOUniverse := transpose(originalUniverse)
-	expandingX := getExpandingY(tOUniverse)
+	tUniverse := advent.Transpose2D(originalUniverse)
+	expandingX := getExpandingY(tUniverse)
 
 	// Get distances
 	return []int{
-		manhattenDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 2)),
-		manhattenDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 10)),
-		manhattenDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 100)),
-		manhattenDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 1_000_000)),
+		calcManhattanDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 2)),
+		calcManhattanDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 10)),
+		calcManhattanDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 100)),
+		calcManhattanDistanceSum(predictGalaxies(originalGalaxies, expandingY, expandingX, 1_000_000)),
 	}
 }
