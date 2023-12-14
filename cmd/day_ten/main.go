@@ -26,7 +26,7 @@ const (
 	Start
 )
 
-var pipeMap map[rune]int = map[rune]int{
+var pipeMap = map[rune]int{
 	'|': NS,
 	'-': EW,
 	'L': NE,
@@ -106,7 +106,7 @@ func getDirection(direction int, pipe int) (int, error) {
 		}
 	}
 
-	return 0, errors.New("No valid direction found")
+	return 0, errors.New("no valid direction found")
 }
 
 // Depends on N-E-S-W order

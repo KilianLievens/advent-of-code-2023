@@ -11,7 +11,7 @@ const (
 	space
 )
 
-var symbolMap map[rune]int = map[rune]int{
+var symbolMap = map[rune]int{
 	'.': space,
 	'#': galaxy,
 }

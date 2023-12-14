@@ -26,8 +26,8 @@ func fixEngine(input []string) (int, int) {
 	partSum := 0
 	gearSum := 0
 
-	var gears map[a.Coord]*Gear = make(map[a.Coord]*Gear)
-	var symbols map[a.Coord]bool = make(map[a.Coord]bool)
+	var gears = make(map[a.Coord]*Gear)
+	var symbols = make(map[a.Coord]bool)
 
 	// Populate symbol matrix and find all potential gears
 	for y, line := range input {

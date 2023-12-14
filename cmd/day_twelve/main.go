@@ -13,7 +13,7 @@ type state struct {
 	Nums  string
 }
 
-var cache map[state]int = make(map[state]int)
+var cache = make(map[state]int)
 
 func sliceIsEqual(a, b []int, fullEqual bool) bool {
 	if fullEqual && (len(a) != len(b)) {
@@ -111,7 +111,7 @@ func popInput(input string, nums []int) (string, []int) {
 
 }
 
-func getAllReplacementPossibilites(input string, nums []int) int {
+func getAllReplacementPossibilities(input string, nums []int) int {
 	s := state{
 		Input: input,
 		Nums:  fmt.Sprintf("%v\n", nums),
@@ -138,11 +138,11 @@ func getAllReplacementPossibilites(input string, nums []int) int {
 	res := 0
 
 	if getPossiblyValid(firstPossibility, curatedNums) {
-		res += getAllReplacementPossibilites(firstPossibility, curatedNums)
+		res += getAllReplacementPossibilities(firstPossibility, curatedNums)
 	}
 
 	if getPossiblyValid(secondPossibility, curatedNums) {
-		res += getAllReplacementPossibilites(secondPossibility, curatedNums)
+		res += getAllReplacementPossibilities(secondPossibility, curatedNums)
 	}
 
 	cache[s] = res
@@ -150,18 +150,18 @@ func getAllReplacementPossibilites(input string, nums []int) int {
 	return res
 }
 
-func getPossibilites(springs string, nums []int, foldCoefficient int) int {
+func getPossibilities(springs string, nums []int, foldCoefficient int) int {
 	var unfoldedNums []int
 	for i := 0; i < foldCoefficient; i++ {
 		unfoldedNums = append(unfoldedNums, nums...)
 	}
 
-	var unfoldedSprings string = springs
+	var unfoldedSprings = springs
 	for i := 1; i < foldCoefficient; i++ {
 		unfoldedSprings += "?" + springs
 	}
 
-	return getAllReplacementPossibilites(unfoldedSprings, unfoldedNums)
+	return getAllReplacementPossibilities(unfoldedSprings, unfoldedNums)
 }
 
 func main() {
@@ -191,11 +191,11 @@ func getArrangements(input []string) (int, int) {
 		}
 
 		// Part 1
-		noFoldPossibilities := getPossibilites(springs, nums, 1)
+		noFoldPossibilities := getPossibilities(springs, nums, 1)
 		sum += noFoldPossibilities
 
 		// Part 2
-		fiveFoldPossibilities := getPossibilites(springs, nums, 5)
+		fiveFoldPossibilities := getPossibilities(springs, nums, 5)
 		foldedSum += fiveFoldPossibilities
 	}
 

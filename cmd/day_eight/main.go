@@ -121,12 +121,12 @@ func navigate(input []string) (uint64, uint64) {
 	}
 
 	// We don't need the offset. AoC was merciful?
-	var loopLenghts []uint64
+	var loopLengths []uint64
 	for _, l := range loops {
-		loopLenghts = append(loopLenghts, l.Length)
+		loopLengths = append(loopLengths, l.Length)
 	}
 
-	ghostSteps := advent.LCM(loopLenghts[0], loopLenghts[1], loopLenghts[2:]...)
+	ghostSteps := advent.LCM(loopLengths[0], loopLengths[1], loopLengths[2:]...)
 
 	return steps, ghostSteps
 }

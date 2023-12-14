@@ -19,7 +19,7 @@ const (
 	fiveOfAKind
 )
 
-var faceMap map[rune]int = map[rune]int{
+var faceMap = map[rune]int{
 	'A': 14,
 	'K': 13,
 	'Q': 12,
@@ -60,15 +60,15 @@ func main() {
 
 func score(input string) int {
 	cards := map[rune]int{}
-	for _, rune := range input {
-		_, ok := cards[rune]
+	for _, r := range input {
+		_, ok := cards[r]
 		if !ok {
-			cards[rune] = 1
+			cards[r] = 1
 
 			continue
 		}
 
-		cards[rune]++
+		cards[r]++
 	}
 
 	pairs := 0
@@ -141,7 +141,7 @@ func adjustScoreForJokers(input string, score int) int {
 
 	if score == threeOfAKind {
 		if jokers > 0 {
-			// Can't be 3-2 or it would be a full house
+			// Can't be 3-2 because that would be a full house
 			return fourOfAKind
 		}
 
@@ -168,7 +168,7 @@ func adjustScoreForJokers(input string, score int) int {
 		return onePair
 	}
 
-	// highcard
+	// highCard
 	if jokers > 0 {
 		return onePair
 	}
@@ -226,19 +226,23 @@ func playPoker(input []string) (int, int) {
 		rawBid := segments[1]
 		bid, _ := strconv.Atoi(rawBid)
 
-		hands = append(hands, hand{
-			Score:     score(rawHand),
-			Bid:       bid,
-			Cards:     rawHand,
-			JokerHand: false,
-		})
+		hands = append(
+			hands, hand{
+				Score:     score(rawHand),
+				Bid:       bid,
+				Cards:     rawHand,
+				JokerHand: false,
+			},
+		)
 
-		jokerHands = append(jokerHands, hand{
-			Score:     adjustScoreForJokers(rawHand, score(rawHand)),
-			Bid:       bid,
-			Cards:     rawHand,
-			JokerHand: true,
-		})
+		jokerHands = append(
+			jokerHands, hand{
+				Score:     adjustScoreForJokers(rawHand, score(rawHand)),
+				Bid:       bid,
+				Cards:     rawHand,
+				JokerHand: true,
+			},
+		)
 	}
 
 	sort.Sort(hands)

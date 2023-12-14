@@ -38,11 +38,11 @@ func (h *history) PopulateDiff() {
 func (h *history) Extrapolate() {
 	// -2 because we don't need to do the zero layer
 	for i := len(h.DiffLayers) - 2; i >= 0; i-- {
-		curDifflayer := h.DiffLayers[i]
-		lastDifflayer := h.DiffLayers[i+1]
+		curDiffLayer := h.DiffLayers[i]
+		lastDiffLayer := h.DiffLayers[i+1]
 
-		next := curDifflayer[len(curDifflayer)-1] + lastDifflayer[len(lastDifflayer)-1]
-		h.DiffLayers[i] = append(curDifflayer, next)
+		next := curDiffLayer[len(curDiffLayer)-1] + lastDiffLayer[len(lastDiffLayer)-1]
+		h.DiffLayers[i] = append(curDiffLayer, next)
 	}
 }
 

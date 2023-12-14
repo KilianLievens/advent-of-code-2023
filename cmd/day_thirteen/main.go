@@ -82,7 +82,7 @@ func getPatternSum(patterns [][][]string, requireSmudged bool) int {
 	return sum
 }
 
-func maing() {
+func main() {
 	exampleOneInput := readWithWhitespace("./input/day_thirteen/example_one.txt")
 	mirrors, smudgedMirrors := detectMirrors(exampleOneInput)
 	fmt.Printf("Example input: mirrors %d smudged mirrors %d\n", mirrors, smudgedMirrors) // 405, 400
