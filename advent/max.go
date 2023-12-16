@@ -9,3 +9,11 @@ func MinInt[T constraints.Integer](x, y T) T {
 
 	return x
 }
+
+func MaxInt[T constraints.Integer](x, y T) T {
+	if x < y {
+		return y
+	}
+
+	return x
+}
